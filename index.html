@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style type="text/css">
+#spreadsheet {
+   float:left;padding:10px;margin:10px;-moz-user-select:none;
+}
+#spreadsheet { background-color: #6633FF; width:75px; height:75px;  }
+</style>
+<script type="text/javascript">
+
+  // $('#droppablediv').dropImport(
+  //  fields: { one: true, two: false}
+  //  processRecords: function(record) { }
+function processRecords(fn) {
+  // for each record
+  // record = { colname: value, col2name: value }
+  // fn(record)
+}
+
+function parseData(data) {
+  var lines = [];
+  var rows = data.split("\n");
+  for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
+    row = rows[rowIndex].split("\t");
+    lines[rowIndex] = []
+    for (var colIndex=0; colIndex<row.length; colIndex++) {
+      lines[rowIndex][colIndex] = row[colIndex]
+    }
+  }
+  return lines
+}
+
+function drawHtml(rows) {
+  sheet = document.getElementById('spreadsheet');
+  output = "<table>";
+  for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
+    row = rows[rowIndex];
+    output += "<tr>"
+    for (var colIndex=0; colIndex<row.length; colIndex++) {
+      output = output + "<td>" + row[colIndex] + "</td>";
+    }
+    output += "</tr>";
+  }
+  output += "</table>";
+  sheet.innerHTML = output;
+}
+
+function dragEnter(ev) {
+  ev.dataTransfer.effectAllowed = "copy"
+   event.preventDefault();
+   return true;
+}
+function dragOver(ev) {
+  ev.dataTransfer.effectAllowed = "copy"
+    return false;
+}
+function dragDrop(ev) {
+  ev.dataTransfer.effectAllowed = "copy";
+  
+  console.log(ev.dataTransfer.dropEffect);
+   var src = ev.dataTransfer.getData("Text");
+   drawHtml(parseData(src))
+
+   ev.stopPropagation();
+   return false;
+}
+</script>
+</head>
+<body>
+
+<div id="spreadsheet" ondragenter="return dragEnter(event)" 
+     ondrop="return dragDrop(event)" 
+     ondragover="return dragOver(event)">Dustbin</div>
+
+</body>
+</html>
