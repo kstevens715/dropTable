@@ -1,6 +1,6 @@
 (function( $ ) {
 
-  $.fn.ddTable = function() {
+  $.fn.dropTable = function() {
 
     this.on('dragover', dragOver);
     this.on('drop', dragDrop);
