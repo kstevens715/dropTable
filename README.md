@@ -15,7 +15,7 @@ In your web page:
 <script src="dist/dropTable.min.js"></script>
 <script>
 jQuery(function($) {
-  $('#spreadsheet').dropify({
+  $('#spreadsheet').dropTable({
     fields: { "field1": true, "field2": false }
     processRecords: function(record) {
       someAjaxCall(record.field1, record.field2);

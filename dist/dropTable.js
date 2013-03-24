@@ -1,11 +1,6 @@
-/*
- * dropTable
- * https://github.com/kstevens715/dropTable
- *
- * Copyright (c) 2013 Kyle Stevens
- * Licensed under the MIT license.
- */
-
+/*! Drag, Drop & Process data from spreadsheet - v0.1.0 - 2013-03-23
+* https://github.com/kstevens715/dropTable
+* Copyright (c) 2013 Kyle Stevens; Licensed MIT */
 (function($) {
 
   $.fn.dropTable = function() {
