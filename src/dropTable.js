@@ -6,7 +6,7 @@
  * Licensed under the MIT license.
  */
 
-(function( $ ) {
+(function($) {
 
   $.fn.dropTable = function() {
 
@@ -19,31 +19,30 @@
   function dragDrop(e) {
     //text/plain
     var src = e.originalEvent.dataTransfer.getData("text/html");
+    var c = $('<div></div>');
+    c.html(src);
+    $(this).html('<table>' + $('table', c).html() + '</table>');
 
-    c = $('<div></div>')
-    c.html(src)
-    $(this).html('<table>' + $('table', c).html() + '</table>')
-
-    console.log(src);
+    document.console.log(src);
     return true;
-  };
+  }
 
-  function dragOver(e) {
+  function dragOver() {
     // return false to allow drops, true otherwise.
     return false;
-  };
+  }
 
-  function dragEnter(e) {
+  function dragEnter() {
     //todo: addClass
     return false;
-  };
+  }
 
-  function dragLeave(e) {
+  function dragLeave() {
     //todo: removeClass
     return false;
-  };
+  }
 
-})( jQuery );
+})(jQuery);
 
 //   // $('#droppablediv').dropImport(
 //   //  fields: { one: true, two: false}
