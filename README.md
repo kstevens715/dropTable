@@ -1,21 +1,36 @@
-ddTables
-========
+# Drag, Drop & Process data from spreadsheet
 
-A jQuery plugin that allows dragging and dropping data from desktop spreadsheet applications. 
-You can then define a callback function to arbitrarily process each record.
+Drag and drop data from LibreOffice and other spreadsheet applications and then process each row.
 
-* Have a shell of a jQuery plugin.
-* Have basic testing framework in place.
-* Have drag and drop functionality creating data structure.
-* It should also create an HTML table.
+## Getting Started
+Download the [production version][min] or the [development version][max].
 
-Example
-=======
+[min]: https://raw.github.com/kstevens715/dropTable/master/dist/dropTable.min.js
+[max]: https://raw.github.com/kstevens715/dropTable/master/dist/dropTable.js
 
-$('#spreadsheet').dropify({
-  fields: { "field1": true, "field2": false }
-  processRecords: function(record) {
-    someAjaxCall(record.field1, record.field2);
-  }
+In your web page:
+
+```html
+<script src="jquery.js"></script>
+<script src="dist/dropTable.min.js"></script>
+<script>
+jQuery(function($) {
+  $('#spreadsheet').dropify({
+    fields: { "field1": true, "field2": false }
+    processRecords: function(record) {
+      someAjaxCall(record.field1, record.field2);
+    }
+  });
 });
+</script>
+<div id="spreadsheet"></div>
+```
 
+## Documentation
+_(Coming soon)_
+
+## Examples
+_(Coming soon)_
+
+## Release History
+_(Nothing yet)_

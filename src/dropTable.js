@@ -1,3 +1,11 @@
+/*
+ * dropTable
+ * https://github.com/kstevens715/dropTable
+ *
+ * Copyright (c) 2013 Kyle Stevens
+ * Licensed under the MIT license.
+ */
+
 (function( $ ) {
 
   $.fn.dropTable = function() {

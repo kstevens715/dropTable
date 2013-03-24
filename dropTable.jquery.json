@@ -7,22 +7,27 @@
     "drag",
     "drop"
   ],
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "homepage": "https://github.com/kstevens715/dropTable",
   "author": {
     "name": "Kyle Stevens",
     "email": "kstevens715@gmail.com",
     "url": "http://kstevens.org"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kstevens715/dropTable.git"
+  },
+  "bugs": "https://github.com/kstevens715/dropTable/issues",
+  "docs": "https://github.com/kstevens715/dropTable",
   "licenses": [
     {
       "type": "MIT",
-      "url": ""
+      "url": "https://github.com/kstevens715/dropTable/blob/master/LICENSE-MIT"
     }
   ],
-  "bugs": "https://github.com/kstevens715/dropTable/issues",
-  "homepage": "https://github.com/kstevens715/dropTable",
-  "docs": "https://github.com/kstevens715/dropTable",
   "dependencies": {
     "jquery": ">=1.7"
-  }
+  },
+  "keywords": []
 }
