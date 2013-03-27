@@ -6,9 +6,16 @@
  * Licensed under the MIT license.
  */
 
+//TODO: Next step is to copy a raw csv string into a div for testing, and allow it to be drag and dropped.
+//      It will simulate dragging and dropping from a spreadsheet.
 (function($) {
 
-  $.fn.dropTable = function() {
+  // A user defined callback to process each row.
+  var onRowProcessed;
+
+  $.fn.dropTable = function(callback) {
+
+    onRowProcessed = callback;
 
     this.on('dragover', dragOver);
     this.on('drop', dragDrop);
@@ -16,70 +23,48 @@
     this.on('dragleave', dragLeave);
     return this;
 
-  };
+  },
 
-  function dragDrop(e) {
-    //text/plain
-    var src = e.originalEvent.dataTransfer.getData("text/html");
-    var c = $('<div></div>');
-    c.html(src);
-    $(this).html('<table>' + $('table', c).html() + '</table>');
-
-    document.console.log(src);
+  dragDrop = function(e) {
+    var data = e.originalEvent.dataTransfer.getData("text/plain"); //Text
+    var result = $.csv.toArrays(data, { separator: "\t" });
+    drawHtml(result);
     return true;
-  }
+  },
 
-  function dragOver() {
+  dragOver = function() {
     // return false to allow drops, true otherwise.
     return false;
-  }
+  },
 
-  function dragEnter() {
+  dragEnter = function() {
     //todo: addClass
     return false;
-  }
+  },
 
-  function dragLeave() {
+  dragLeave = function() {
     //todo: removeClass
     return false;
+  },
+
+  drawHtml = function(rows) {
+    sheet = document.getElementById('spreadsheet');
+    output = "<table>";
+    for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
+      row = rows[rowIndex];
+
+      //TODO: Pass an object instead of an array if we have column headers.
+      onRowProcessed(row);
+
+      output += "<tr>"
+      for (var colIndex=0; colIndex<row.length; colIndex++) {
+        output = output + "<td>" + row[colIndex] + "</td>";
+      }
+      output += "</tr>";
+    }
+    output += "</table>";
+    sheet.innerHTML = output;
   }
 
 })(jQuery);
 
-//   // $('#droppablediv').dropImport(
-//   //  fields: { one: true, two: false}
-//   //  processRecords: function(record) { }
-// function processRecords(fn) {
-//   // for each record
-//   // record = { colname: value, col2name: value }
-//   // fn(record)
-// }
-// 
-// function parseData(data) {
-//   var lines = [];
-//   var rows = data.split("\n");
-//   for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
-//     row = rows[rowIndex].split("\t");
-//     lines[rowIndex] = []
-//     for (var colIndex=0; colIndex<row.length; colIndex++) {
-//       lines[rowIndex][colIndex] = row[colIndex]
-//     }
-//   }
-//   return lines
-// }
-// 
-// function drawHtml(rows) {
-//   sheet = document.getElementById('spreadsheet');
-//   output = "<table>";
-//   for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
-//     row = rows[rowIndex];
-//     output += "<tr>"
-//     for (var colIndex=0; colIndex<row.length; colIndex++) {
-//       output = output + "<td>" + row[colIndex] + "</td>";
-//     }
-//     output += "</tr>";
-//   }
-//   output += "</table>";
-//   sheet.innerHTML = output;
-// }
-// 

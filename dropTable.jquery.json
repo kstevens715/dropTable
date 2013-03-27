@@ -22,7 +22,8 @@
     }
   ],
   "dependencies": {
-    "jquery": ">=1.7"
+    "jquery": ">=1.7",
+    "jquery.csv": ">=0.71"
   },
   "keywords": [
     "jquery",
