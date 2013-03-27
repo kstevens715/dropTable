@@ -1,6 +1,8 @@
 # Drag, Drop & Process data from spreadsheet
 
-Drag and drop data from LibreOffice and other spreadsheet applications and then process each row.
+A jQuery plugin that allows you to drag and drop data from a spreadsheet, and 
+then define an arbitrary handler method to handle each row (so you could call
+a web service, for example).
 
 ## Getting Started
 Download the [production version][min] or the [development version][max].
