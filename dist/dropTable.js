@@ -3,20 +3,21 @@
 * Copyright (c) 2013 Kyle Stevens; Licensed MIT */
 (function($) {
 
+  var that;
   var options;
 
   var methods = {
 
     drop: function(e) {
       var data = e.originalEvent.dataTransfer.getData("Text"); //Text
-      var result = $.csv.toArrays(data, { separator: "\t" });
+      var result = $.csv.toArrays(data, { separator: options.fieldDelimiter });
       methods.drawHtml(result);
       return true;
     },
 
     dragOver: function() {
       // return false to allow drops, true otherwise.
-      return true;
+      return false;
     },
 
     dragEnter: function() {
@@ -30,7 +31,6 @@
     },
 
     drawHtml: function(rows) {
-      var sheet = document.getElementById('spreadsheet');
       var output = "<table>";
       for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
         var row = rows[rowIndex];
@@ -51,15 +51,18 @@
         output += "</tr>";
       }
       output += "</table>";
-      sheet.innerHTML = output;
+      that.html(output);
     }
   };
 
   $.fn.dropTable = function(opts) {
 
+    that = this;
+
     options = $.extend({
-      fnProcessRow: null,
-      processOnDrop: true
+      fnProcessRow: null,   // A callback to process each row.
+      processOnDrop: true,  // Whether to process rows automatically.
+      fieldDelimiter: "\t"  // The field delimiter to parse dropped data.
     }, opts);
 
     this.on('dragover',  methods.dragOver);

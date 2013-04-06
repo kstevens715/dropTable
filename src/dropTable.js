@@ -8,6 +8,7 @@
 
 (function($) {
 
+  var that;
   var options;
 
   var methods = {
@@ -35,7 +36,6 @@
     },
 
     drawHtml: function(rows) {
-      var sheet = document.getElementById('spreadsheet');
       var output = "<table>";
       for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
         var row = rows[rowIndex];
@@ -56,11 +56,13 @@
         output += "</tr>";
       }
       output += "</table>";
-      sheet.innerHTML = output;
+      that.html(output);
     }
   };
 
   $.fn.dropTable = function(opts) {
+
+    that = this;
 
     options = $.extend({
       fnProcessRow: null,   // A callback to process each row.

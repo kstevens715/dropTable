@@ -17,8 +17,8 @@
 
   module('jQuery#dropTable', {
     setup: function() {
-      $('#qunit-fixture').html('<div id="spreadsheet"></div>');
-      this.spreadsheet = $('#spreadsheet');
+      $('#qunit-fixture').html('<div id="dTable"></div>');
+      this.dTable = $('#dTable');
     },
     teardown: function() {
       $('#qunit-fixture').html('');
@@ -33,8 +33,8 @@
       fnProcessRow: function() { count += 1; }
     };
     var e = dropEventMock('a\nb\nc\n');
-    this.spreadsheet.dropTable(opts);
-    this.spreadsheet.trigger(e);
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
     strictEqual(count, 0);
   });
 
@@ -47,8 +47,8 @@
         count += 1;
       }
     };
-    this.spreadsheet.dropTable(opts);
-    this.spreadsheet.trigger(e);
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
     strictEqual(count, 3);
   });
 
@@ -61,8 +61,8 @@
         data = row;
       }
     };
-    this.spreadsheet.dropTable(opts);
-    this.spreadsheet.trigger(e);
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
     deepEqual(data, ['a', 'b', 'c']);
   });
 
@@ -76,22 +76,22 @@
         data = row;
       }
     };
-    this.spreadsheet.dropTable(opts);
-    this.spreadsheet.trigger(e);
-    deepEqual(data, ['a', 'b', 'c'])
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    deepEqual(data, ['a', 'b', 'c']);
   });
 
   test('can be called without options', function() {
     expect(1);
     var e = dropEventMock('a\tb\tc\n');
-    this.spreadsheet.dropTable();
-    this.spreadsheet.trigger(e);
+    this.dTable.dropTable();
+    this.dTable.trigger(e);
     ok(true, "options _are_ optional");
   });
 
   test('is chainable', function() {
     expect(1);
-    strictEqual(this.spreadsheet.dropTable(), this.spreadsheet, 'should be chainable');
+    strictEqual(this.dTable.dropTable(), this.dTable, 'should be chainable');
   });
 
 }(jQuery));
