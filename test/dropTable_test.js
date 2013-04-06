@@ -7,8 +7,13 @@
     return window._$.Event("drop", {
       originalEvent: {
         dataTransfer: {
-          getData: function() {
-            return data;
+          getData: function(dataFormat) {
+            if (dataFormat === "Text") {
+              return data;
+            } else {
+              // A hack to make dataFormat option testable.
+              return dataFormat + "\n";
+            }
           }
         }
       }
@@ -23,19 +28,6 @@
     teardown: function() {
       $('#qunit-fixture').html('');
     }
-  });
-
-  test('can delay callbacks', function() {
-    expect(1);
-    var count = 0;
-    var opts = {
-      processOnDrop: false,
-      fnProcessRow: function() { count += 1; }
-    };
-    var e = dropEventMock('a\nb\nc\n');
-    this.dTable.dropTable(opts);
-    this.dTable.trigger(e);
-    strictEqual(count, 0);
   });
 
   test('callback is called once per row', function() {
@@ -66,6 +58,19 @@
     deepEqual(data, ['a', 'b', 'c']);
   });
 
+  test('can delay callbacks', function() {
+    expect(1);
+    var count = 0;
+    var opts = {
+      processOnDrop: false,
+      fnProcessRow: function() { count += 1; }
+    };
+    var e = dropEventMock('a\nb\nc\n');
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    strictEqual(count, 0);
+  });
+
   test('fieldDelimiter can be changed', function() {
     expect(1);
     var data = null;
@@ -87,6 +92,19 @@
     this.dTable.dropTable();
     this.dTable.trigger(e);
     ok(true, "options _are_ optional");
+  });
+
+  test('dataFormat can be set', function() {
+    expect(1);
+    var format;
+    var opts = {
+      dataFormat: 'text/html',
+      fnProcessRow: function(row) { format = row; }
+    };
+    var e = dropEventMock('a\nb\nc\n');
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    equal(format, "text/html");
   });
 
   test('is chainable', function() {

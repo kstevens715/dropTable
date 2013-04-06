@@ -14,7 +14,7 @@
   var methods = {
 
     drop: function(e) {
-      var data = e.originalEvent.dataTransfer.getData("Text"); //Text
+      var data = e.originalEvent.dataTransfer.getData(options.dataFormat);
       var result = $.csv.toArrays(data, { separator: options.fieldDelimiter });
       methods.drawHtml(result);
       return true;
@@ -67,7 +67,8 @@
     options = $.extend({
       fnProcessRow: null,   // A callback to process each row.
       processOnDrop: true,  // Whether to process rows automatically.
-      fieldDelimiter: "\t"  // The field delimiter to parse dropped data.
+      fieldDelimiter: "\t", // The field delimiter to parse dropped data.
+      dataFormat: "Text"    // Text seems to be most compatible.
     }, opts);
 
     this.on('dragover',  methods.dragOver);
