@@ -6,8 +6,6 @@
  * Licensed under the MIT license.
  */
 
-//TODO: Next step is to copy a raw csv string into a div for testing, and allow it to be drag and dropped.
-//      It will simulate dragging and dropping from a spreadsheet.
 (function($) {
 
   var options;
@@ -16,7 +14,7 @@
 
     drop: function(e) {
       var data = e.originalEvent.dataTransfer.getData("Text"); //Text
-      var result = $.csv.toArrays(data, { separator: "\t" });
+      var result = $.csv.toArrays(data, { separator: options.fieldDelimiter });
       methods.drawHtml(result);
       return true;
     },
@@ -65,8 +63,9 @@
   $.fn.dropTable = function(opts) {
 
     options = $.extend({
-      fnProcessRow: null,
-      processOnDrop: true
+      fnProcessRow: null,   // A callback to process each row.
+      processOnDrop: true,  // Whether to process rows automatically.
+      fieldDelimiter: "\t"  // The field delimiter to parse dropped data.
     }, opts);
 
     this.on('dragover',  methods.dragOver);

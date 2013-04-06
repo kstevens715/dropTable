@@ -1,8 +1,6 @@
 /*! Drag, Drop & Process data from spreadsheet - v0.1.0 - 2013-04-06
 * https://github.com/kstevens715/dropTable
 * Copyright (c) 2013 Kyle Stevens; Licensed MIT */
-//TODO: Next step is to copy a raw csv string into a div for testing, and allow it to be drag and dropped.
-//      It will simulate dragging and dropping from a spreadsheet.
 (function($) {
 
   var options;
@@ -18,7 +16,7 @@
 
     dragOver: function() {
       // return false to allow drops, true otherwise.
-      return false;
+      return true;
     },
 
     dragEnter: function() {

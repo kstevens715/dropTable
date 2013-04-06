@@ -66,6 +66,21 @@
     deepEqual(data, ['a', 'b', 'c']);
   });
 
+  test('fieldDelimiter can be changed', function() {
+    expect(1);
+    var data = null;
+    var e = dropEventMock('a,b,c\n');
+    var opts = {
+      fieldDelimiter: ',',
+      fnProcessRow: function(row) {
+        data = row;
+      }
+    };
+    this.spreadsheet.dropTable(opts);
+    this.spreadsheet.trigger(e);
+    deepEqual(data, ['a', 'b', 'c'])
+  });
+
   test('can be called without options', function() {
     expect(1);
     var e = dropEventMock('a\tb\tc\n');
