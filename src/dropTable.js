@@ -10,28 +10,32 @@
 //      It will simulate dragging and dropping from a spreadsheet.
 (function($) {
 
-  // A user defined callback to process each row.
-  var onRowProcessed;
+  var options;
 
   var methods = {
+
     drop: function(e) {
-      var data = e.originalEvent.dataTransfer.getData("text/plain"); //Text
+      var data = e.originalEvent.dataTransfer.getData("Text"); //Text
       var result = $.csv.toArrays(data, { separator: "\t" });
       methods.drawHtml(result);
       return true;
     },
+
     dragOver: function() {
       // return false to allow drops, true otherwise.
       return false;
     },
+
     dragEnter: function() {
       //todo: addClass
       return false;
     },
+
     dragLeave: function() {
       //todo: removeClass
       return false;
     },
+
     drawHtml: function(rows) {
       var sheet = document.getElementById('spreadsheet');
       var output = "<table>";
@@ -39,12 +43,18 @@
         var row = rows[rowIndex];
 
         //TODO: Pass an object instead of an array if we have column headers.
-        onRowProcessed(row);
+        //console.log("Callbacks? " + settings.runCallbacksOnDrop);
+        if (options.processOnDrop &&
+              typeof(options.fnProcessRow) === "function") {
+          options.fnProcessRow(row);
+        }
 
         output += "<tr>";
+
         for (var colIndex=0; colIndex<row.length; colIndex++) {
           output = output + "<td>" + row[colIndex] + "</td>";
         }
+
         output += "</tr>";
       }
       output += "</table>";
@@ -52,9 +62,12 @@
     }
   };
 
-  $.fn.dropTable = function(callback) {
+  $.fn.dropTable = function(opts) {
 
-    onRowProcessed = callback;
+    options = $.extend({
+      fnProcessRow: null,
+      processOnDrop: true
+    }, opts);
 
     this.on('dragover',  methods.dragOver);
     this.on('drop',      methods.drop);

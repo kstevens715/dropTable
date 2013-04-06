@@ -7,40 +7,18 @@
   <script src="../libs/jquery-loader.js"></script>
   <!-- Load local QUnit. -->
   <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
-  <style type="text/css">
-    #spreadsheet {
-      float:left;padding:100px;margin:100px;-moz-user-select:none;
-    }
-    #spreadsheet { background-color: #6633FF; width:75px; height:75px;  }
-    #openoffice {
-      float:left;padding:100px;margin:100px;-moz-user-select:none;
-    }
-    #openoffice { background-color: #009900; width:75px; height:75px;  }
-  </style>
   <script src="../libs/qunit/qunit.js"></script>
   <script src="../libs/jquery.csv-0.71.js" type="text/javascript"></script>
   <!-- Load local lib and tests. -->
   <script src="../src/dropTable.js"></script>
-  <script type="text/javascript">
-
-    function drag(e)
-    {
-      e.dataTransfer.setData("Text", "column1\tcolumn2\tcolumn3\nrow2a\trow2b\trow2c\nrow3a\trow3b\trow3c");
-    }
-    
-  </script>
   <script src="dropTable_test.js"></script>
   <!-- Removing access to jQuery and $. But it'll still be available as _$, if
        you REALLY want to mess around with jQuery in the console. REMEMBER WE
-       ARE TESTING A PLUGIN HERE, THIS HELPS ENSURE BEST PRACTICES. REALLY.
-       <script>window._$ = jQuery.noConflict(true);</script>-->
+       ARE TESTING A PLUGIN HERE, THIS HELPS ENSURE BEST PRACTICES. REALLY. -->
+       <script>window._$ = jQuery.noConflict(true);</script>
 </head>
 <body>
   <div id="qunit"></div>
-  <div id="openoffice" draggable="true" ondragstart="drag(event)">
-    LIBREOFFICE FORMAT
-  </div>
-  <div id="spreadsheet">
-  </div>
+  <div id="qunit-fixture"></div>
 </body>
 </html>
