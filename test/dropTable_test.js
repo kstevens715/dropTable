@@ -20,11 +20,45 @@
       throws(block, [expected], [message])
   */
 
-  module('jQuery#awesome', {
+  // This is all that I need from the event
+  // e.originalEvent.dataTransfer.getData("text/plain");
+  //
+
+  dropEventMock = function(data) {
+    return jQuery.Event("drop", {
+      originalEvent: {
+        dataTransfer: {
+          getData: function(methType) {
+            return data;
+          }
+        }
+      }
+    });
+  };
+
+  module('jQuery#dropTable', {
     // This will run before each test in this module.
     setup: function() {
       this.spreadsheet = $('#spreadsheet');
     }
+  });
+
+  test('callback is called once per row', function() {
+    expect(1);
+    var count = 0;
+    var e = dropEventMock('a\nb\nc\n');
+    this.spreadsheet.dropTable(function(row) { count += 1; });
+    this.spreadsheet.trigger(e);
+    strictEqual(count, 3)
+  });
+
+  test('callback is passed row data', function() {
+    expect(1);
+    var e = dropEventMock('a\tb\tc\n');
+    var data = null;
+    this.spreadsheet.dropTable(function(row) { data = row; });
+    this.spreadsheet.trigger(e);
+    deepEqual(data, ['a', 'b', 'c'])
   });
 
   test('is chainable', function() {
