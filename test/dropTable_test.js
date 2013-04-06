@@ -30,7 +30,24 @@
     }
   });
 
-  test('callback is called once per row', function() {
+  test('fnDropComplete called after drop', function() {
+    expect(1);
+    var e = dropEventMock('a\nb\nc\n');
+    var rowsProcessed = 0;
+    var opts = {
+      fnProcessRow: function() {
+        rowsProcessed += 1;
+      },
+      fnDropComplete: function() {
+        equal(rowsProcessed, 3);
+      }
+    };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+
+  });
+
+  test('fnProcessRow called once per row', function() {
     expect(1);
     var count = 0;
     var e = dropEventMock('a\nb\nc\n');
@@ -44,7 +61,7 @@
     strictEqual(count, 3);
   });
 
-  test('callback is passed row data', function() {
+  test('fnProcessRow is passed row data', function() {
     expect(1);
     var e = dropEventMock('a\tb\tc\n');
     var data = null;

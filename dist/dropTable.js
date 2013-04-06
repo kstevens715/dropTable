@@ -1,6 +1,13 @@
 /*! Drag, Drop & Process data from spreadsheet - v0.1.0 - 2013-04-06
 * https://github.com/kstevens715/dropTable
 * Copyright (c) 2013 Kyle Stevens; Licensed MIT */
+//TODO: Callback when data is dropped.
+//TODO: Manually call method to process rows.
+//TODO: Anything with keys, hashes, column headers, etc?
+//TODO: Fallback to simple csv parsing if csv plugin isn't available.
+//      (console.log a warning).
+//TODO: Styling.
+//TODO: What about escaping the data from the drag and drop operation?
 (function($) {
 
   var that;
@@ -12,6 +19,9 @@
       var data = e.originalEvent.dataTransfer.getData(options.dataFormat);
       var result = $.csv.toArrays(data, { separator: options.fieldDelimiter });
       methods.drawHtml(result);
+      if (typeof(options.fnDropComplete) === 'function') {
+        options.fnDropComplete();
+      }
       return true;
     },
 
@@ -31,12 +41,14 @@
     },
 
     drawHtml: function(rows) {
+
       var output = "<table>";
+      var row;
+
       for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
-        var row = rows[rowIndex];
+        row = rows[rowIndex];
 
         //TODO: Pass an object instead of an array if we have column headers.
-        //console.log("Callbacks? " + settings.runCallbacksOnDrop);
         if (options.processOnDrop &&
               typeof(options.fnProcessRow) === "function") {
           options.fnProcessRow(row);
@@ -61,15 +73,18 @@
 
     options = $.extend({
       fnProcessRow: null,   // A callback to process each row.
+      fnDropComplete: null, // Called after drop and all processing.
       processOnDrop: true,  // Whether to process rows automatically.
       fieldDelimiter: "\t", // The field delimiter to parse dropped data.
       dataFormat: "Text"    // Text seems to be most compatible.
     }, opts);
 
+    //bind?
     this.on('dragover',  methods.dragOver);
     this.on('drop',      methods.drop);
     this.on('dragenter', methods.dragEnter);
     this.on('dragleave', methods.dragLeave);
+
     return this;
 
   };
