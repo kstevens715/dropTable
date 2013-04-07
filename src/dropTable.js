@@ -41,10 +41,17 @@
     drop: function(e) {
       var data = e.originalEvent.dataTransfer.getData(options.dataFormat);
       rows = methods.parseData(data);
+
+      if (!options.delayProcessing) {
+        publicMethods.process();
+      }
+
       methods.drawHtml();
+
       if (typeof(options.fnDropComplete) === 'function') {
         options.fnDropComplete();
       }
+
       return true;
     },
 
@@ -76,12 +83,6 @@
       for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
         row = rows[rowIndex];
 
-        //TODO: Pass an object instead of an array if we have column headers.
-        if (!options.delayProcessing &&
-              typeof(options.fnProcessRow) === "function") {
-          options.fnProcessRow(row, rowIndex + 1);
-        }
-
         output += "<tr>";
 
         for (colIndex=0; colIndex<row.length; colIndex++) {
@@ -98,14 +99,12 @@
   var publicMethods = {
 
     process: function() {
-      //TODO: DRY this, and the similar functionality in drawHTML.
       var row,
           rowIndex;
 
-      for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
-        row = rows[rowIndex];
-
-        if (typeof(options.fnProcessRow) === "function") {
+      if (typeof(options.fnProcessRow) === "function") {
+        for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
+          row = rows[rowIndex];
           options.fnProcessRow(row, rowIndex + 1);
         }
       }
