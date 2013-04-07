@@ -8,7 +8,7 @@
 
 (function($) {
 
-  var DISALLOW_DROP = false;
+  var BADGE = "Badge";
 
   var that,
       options,
@@ -32,18 +32,8 @@
       this.on('dragenter', methods.dragEnter);
       this.on('dragleave', methods.dragLeave);
 
-      methods.showColumnDefinitions();
+      methods.renderDropTable();
 
-    },
-
-
-    showColumnDefinitions: function() {
-      var output = '<div><ul class="unstyled">';
-      for (var column in options.columnDefinitions) {
-        output += '<li><span class="badge">' + column + '</span></li>';
-      }
-      output += "</ul></div>";
-      that.append(output);
     },
 
     drop: function(e) {
@@ -54,7 +44,7 @@
         publicMethods.process();
       }
 
-      methods.drawHtml();
+      methods.renderTable();
 
       if (typeof(options.fnDropComplete) === 'function') {
         options.fnDropComplete();
@@ -63,8 +53,8 @@
       return true;
     },
 
-    dragOver: function() {
-      return DISALLOW_DROP;
+    dragOver: function(e) {
+      return methods.isBadge(e);
     },
 
     dragEnter: function() {
@@ -75,16 +65,52 @@
       return false;
     },
 
+    isBadge: function(e) {
+      var data = e.originalEvent.dataTransfer.getData(BADGE);
+      return data === "" ? false : true;
+    },
+
     parseData: function(data) {
       return $.csv.toArrays(data, { separator: options.fieldDelimiter });
     },
 
-    drawHtml: function() {
+    renderDropTable: function() {
+      var output =
+        "<div class='droptable-sidebar'>" +
+        "</div>" +
+        "<div class='droptable-droparea'>" +
+        "<p>Drop Data Here!</p>"+
+        "</div>"
+      that.html(output);
+      methods.renderSidebar();
+    },
+
+    renderSidebar: function() {
+      var output = '<div><ul class="unstyled">';
+      for (var column in options.columnDefinitions) {
+        output += '<li>';
+        output += '<span class="badge" draggable="true" ';
+        output += 'ondragstart="'
+        output += 'event.dataTransfer.setData(\'Badge\', \'' + column + '\')"';
+        output += '>';
+        output += column ;
+        output += '</span></li>';
+      }
+      output += "</ul></div>";
+      that.find('.droptable-sidebar').html(output);
+    },
+
+    renderTable: function() {
 
       var output = '<table class="table table-striped table-bordered">';
       var row, 
           rowIndex,
           colIndex;
+
+      output += '<thead>';
+      output += '<tr><th><span class="badge">test</span></th><th></th><th></th></tr>';
+      output += '</thead>';
+      output += '<tbody>';
 
       for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
         row = rows[rowIndex];
@@ -97,8 +123,9 @@
 
         output += "</tr>";
       }
+      output += "</tbody>";
       output += "</table>";
-      that.append(output);
+      that.find('.droptable-droparea').html(output);
     }
   };
 
