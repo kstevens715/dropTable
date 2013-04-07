@@ -23,7 +23,13 @@
     }
     
     $(function() {
-        $('#spreadsheet').dropTable(function(d) {console.log(d[0]);});
+        var opts = {
+          fnProcessRow: function(data) {
+            console.log("PROCESSING ROW");
+            console.log(data);
+          }
+        };
+        $('#spreadsheet').dropTable(opts);
     });
   </script>
 

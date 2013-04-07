@@ -6,9 +6,10 @@
 //      (console.log a warning).
 //TODO: Styling.
 //TODO: What about escaping the data from the drag and drop operation?
-//TODO: Splitup methods so that drag events are not public.
+//TODO: Splitup methods (privateMethods) so that drag events are not public.
 (function($) {
 
+  var DISALLOW_DROP = false;
   var that;
   var options;
   var rows = [];
@@ -24,8 +25,7 @@
         fieldDelimiter: "\t",   // The field delimiter to parse dropped data.
         dataFormat: "Text"      // Text seems to be most compatible.
       }, opts);
-      
-      //bind?
+
       this.on('dragover',  methods.dragOver);
       this.on('drop',      methods.drop);
       this.on('dragenter', methods.dragEnter);
@@ -57,17 +57,16 @@
     },
 
     dragOver: function() {
-      // return false to allow drops, true otherwise.
-      return false;
+      return DISALLOW_DROP;
     },
 
     dragEnter: function() {
-      //todo: addClass
+      //TODO: addClass
       return false;
     },
 
     dragLeave: function() {
-      //todo: removeClass
+      //TODO: removeClass
       return false;
     },
 

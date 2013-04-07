@@ -88,7 +88,7 @@
     strictEqual(rowsProcessed, 0, "should not process rows automatically");
   });
 
-  test('process method triggers delayed row processing', function() {
+  test('trigger process rows manually', function() {
     expect(2);
     var e = dropEventMock('a\nb\nc\n');
     var rowsProcessed = 0;
