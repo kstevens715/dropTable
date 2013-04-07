@@ -3,17 +3,13 @@
   // This is all that I need from the event
   // e.originalEvent.dataTransfer.getData("text/plain");
 
-  var dropEventMock = function(data) {
+  var dropEventMock = function(data, srcFormat) {
+    srcFormat = typeof srcFormat !== 'undefined' ? srcFormat : 'Text';
     return window._$.Event("drop", {
       originalEvent: {
         dataTransfer: {
           getData: function(dataFormat) {
-            if (dataFormat === "Text") {
-              return data;
-            } else {
-              // A hack to make dataFormat option testable.
-              return dataFormat + "\n";
-            }
+            return dataFormat === srcFormat ? data : ""
           }
         }
       }
@@ -47,6 +43,23 @@
     equal(columns[0].innerText, 'title');
     equal(columns[1].innerText, 'body');
     equal(columns[2].innerText, 'assignee');
+  });
+
+  test('badges cannot be dropped as data', function() {
+    var e = dropEventMock('title', 'Badge'),
+        dataDropped = false,
+        opts = {
+          columnDefinitions: {
+            title: true,
+            body: false
+          },
+          fnDropComplete: function() {
+            dataDropped = true;
+          }
+        }
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    ok(!dataDropped);
   });
 
   test('fnDropComplete called after drop', function() {
@@ -161,15 +174,15 @@
 
   test('dataFormat can be set', function() {
     expect(1);
-    var format;
-    var e = dropEventMock('a\nb\nc\n');
-    var opts = {
-      dataFormat: 'text/html',
-      fnProcessRow: function(row) { format = row; }
-    };
+    var data,
+        e = dropEventMock('a\tb\tc\n', 'text/html');
+        opts = {
+          dataFormat: 'text/html',
+          fnProcessRow: function(row) { data = row; }
+        };
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
-    equal(format, "text/html");
+    deepEqual(data, ['a', 'b', 'c']);
   });
 
   test('is chainable', function() {

@@ -37,20 +37,24 @@
     },
 
     drop: function(e) {
-      var data = e.originalEvent.dataTransfer.getData(options.dataFormat);
-      rows = methods.parseData(data);
+      if (!methods.isBadge(e)) {
+        var data = e.originalEvent.dataTransfer.getData(options.dataFormat);
+        rows = methods.parseData(data);
 
-      if (!options.delayProcessing) {
-        publicMethods.process();
+        if (!options.delayProcessing) {
+          publicMethods.process();
+        }
+
+        methods.renderTable();
+
+        if (typeof(options.fnDropComplete) === 'function') {
+          options.fnDropComplete();
+        }
+
+        return true;
+      } else {
+        return false; //TODO: What should be the return value of drop?
       }
-
-      methods.renderTable();
-
-      if (typeof(options.fnDropComplete) === 'function') {
-        options.fnDropComplete();
-      }
-
-      return true;
     },
 
     dragOver: function(e) {
