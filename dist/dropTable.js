@@ -1,14 +1,9 @@
 /*! Drag, Drop & Process data from spreadsheet - v0.1.0 - 2013-04-07
 * https://github.com/kstevens715/dropTable
 * Copyright (c) 2013 Kyle Stevens; Licensed MIT */
-//TODO: Anything with keys, hashes, column headers, etc?
-//TODO: Fallback to simple csv parsing if csv plugin isn't available.
-//      (console.log a warning).
-//TODO: Styling.
-//TODO: What about escaping the data from the drag and drop operation?
 (function($) {
 
-  var DISALLOW_DROP = false;
+  var BADGE = "Badge";
 
   var that,
       options,
@@ -23,13 +18,16 @@
         fnDropComplete: null,   // Called after drop and all processing.
         delayProcessing: false, // 
         fieldDelimiter: "\t",   // The field delimiter to parse dropped data.
-        dataFormat: "Text"      // Text seems to be most compatible.
+        dataFormat: "Text",     // Text seems to be most compatible.
+        columnDefinitions: null
       }, opts);
 
       this.on('dragover',  methods.dragOver);
       this.on('drop',      methods.drop);
       this.on('dragenter', methods.dragEnter);
       this.on('dragleave', methods.dragLeave);
+
+      methods.renderDropTable();
 
     },
 
@@ -41,7 +39,7 @@
         publicMethods.process();
       }
 
-      methods.drawHtml();
+      methods.renderTable();
 
       if (typeof(options.fnDropComplete) === 'function') {
         options.fnDropComplete();
@@ -50,30 +48,64 @@
       return true;
     },
 
-    dragOver: function() {
-      return DISALLOW_DROP;
+    dragOver: function(e) {
+      return methods.isBadge(e);
     },
 
     dragEnter: function() {
-      //TODO: addClass
       return false;
     },
 
     dragLeave: function() {
-      //TODO: removeClass
       return false;
+    },
+
+    isBadge: function(e) {
+      var data = e.originalEvent.dataTransfer.getData(BADGE);
+      return data === "" ? false : true;
     },
 
     parseData: function(data) {
       return $.csv.toArrays(data, { separator: options.fieldDelimiter });
     },
 
-    drawHtml: function() {
+    renderDropTable: function() {
+      var output =
+        "<div class='droptable-sidebar'>" +
+        "</div>" +
+        "<div class='droptable-droparea'>" +
+        "<p>Drop Data Here!</p>"+
+        "</div>";
+      that.html(output);
+      methods.renderSidebar();
+    },
 
-      var output = "<table>";
+    renderSidebar: function() {
+      var output = '<div><ul class="droptable-columndefinitions unstyled">';
+      for (var column in options.columnDefinitions) {
+        output += '<li>';
+        output += '<span class="badge" draggable="true" ';
+        output += 'ondragstart="';
+        output += 'event.dataTransfer.setData(\'Badge\', \'' + column + '\')"';
+        output += '>';
+        output += column ;
+        output += '</span></li>';
+      }
+      output += "</ul></div>";
+      that.find('.droptable-sidebar').html(output);
+    },
+
+    renderTable: function() {
+
+      var output = '<table class="table table-striped table-bordered">';
       var row, 
           rowIndex,
           colIndex;
+
+      output += '<thead>';
+      output += '<tr><th><span class="badge">test</span></th><th></th><th></th></tr>';
+      output += '</thead>';
+      output += '<tbody>';
 
       for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
         row = rows[rowIndex];
@@ -86,8 +118,9 @@
 
         output += "</tr>";
       }
+      output += "</tbody>";
       output += "</table>";
-      that.html(output);
+      that.find('.droptable-droparea').html(output);
     }
   };
 

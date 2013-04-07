@@ -31,19 +31,22 @@
   });
 
   test('fieldDefinitions display as badge list', function() {
-    expect(1);
-    var e = dropEventMock('a\nb\nc\n');
-    var opts = {
-      columnDefinitions: {
-        title: true,
-        body: false,
-        assignee: false
-      }
-    };
+    expect(3);
+    var columns,
+        e = dropEventMock('a\nb\nc\n'),
+        opts = {
+          columnDefinitions: {
+            title: true,
+            body: false,
+            assignee: false
+          }
+        };
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
-    this.dTable;
-    console.log('done');
+    columns = this.dTable.find('.droptable-columndefinitions > li');
+    equal(columns[0].innerText, 'title');
+    equal(columns[1].innerText, 'body');
+    equal(columns[2].innerText, 'assignee');
   });
 
   test('fnDropComplete called after drop', function() {
@@ -58,7 +61,6 @@
         equal(rowsProcessed, 3);
       }
     };
-    this.dTable.find('ul')
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
 

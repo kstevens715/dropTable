@@ -80,17 +80,17 @@
         "</div>" +
         "<div class='droptable-droparea'>" +
         "<p>Drop Data Here!</p>"+
-        "</div>"
+        "</div>";
       that.html(output);
       methods.renderSidebar();
     },
 
     renderSidebar: function() {
-      var output = '<div><ul class="unstyled">';
+      var output = '<div><ul class="droptable-columndefinitions unstyled">';
       for (var column in options.columnDefinitions) {
         output += '<li>';
         output += '<span class="badge" draggable="true" ';
-        output += 'ondragstart="'
+        output += 'ondragstart="';
         output += 'event.dataTransfer.setData(\'Badge\', \'' + column + '\')"';
         output += '>';
         output += column ;
