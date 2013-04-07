@@ -11,7 +11,6 @@
 //      (console.log a warning).
 //TODO: Styling.
 //TODO: What about escaping the data from the drag and drop operation?
-//TODO: Splitup methods (privateMethods) so that drag events are not public.
 (function($) {
 
   var DISALLOW_DROP = false;
@@ -36,18 +35,6 @@
       this.on('dragenter', methods.dragEnter);
       this.on('dragleave', methods.dragLeave);
 
-    },
-
-    process: function() {
-      //TODO: DRY this, and the similar functionality in drawHTML.
-      var row;
-      for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
-        row = rows[rowIndex];
-
-        if (typeof(options.fnProcessRow) === "function") {
-          options.fnProcessRow(row);
-        }
-      }
     },
 
     drop: function(e) {
@@ -102,12 +89,27 @@
     }
   };
 
+  var publicMethods = {
+
+    process: function() {
+      //TODO: DRY this, and the similar functionality in drawHTML.
+      var row;
+      for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
+        row = rows[rowIndex];
+
+        if (typeof(options.fnProcessRow) === "function") {
+          options.fnProcessRow(row);
+        }
+      }
+    }
+  };
+
   $.fn.dropTable = function(method) {
 
     that = this;
 
-    if (methods[method]) {
-      methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+    if (publicMethods[method]) {
+      publicMethods[method].apply(this, Array.prototype.slice.call(arguments, 1));
     } else if (typeof method === 'object' || !method) {
       methods.init.apply(this, arguments);
     } else {
