@@ -14,9 +14,10 @@
 (function($) {
 
   var DISALLOW_DROP = false;
-  var that;
-  var options;
-  var rows = [];
+
+  var that,
+      options,
+      rows = [];
 
   var methods = {
 
@@ -65,20 +66,22 @@
     drawHtml: function() {
 
       var output = "<table>";
-      var row;
+      var row, 
+          rowIndex,
+          colIndex;
 
-      for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
+      for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
         row = rows[rowIndex];
 
         //TODO: Pass an object instead of an array if we have column headers.
         if (!options.delayProcessing &&
               typeof(options.fnProcessRow) === "function") {
-          options.fnProcessRow(row);
+          options.fnProcessRow(row, rowIndex + 1);
         }
 
         output += "<tr>";
 
-        for (var colIndex=0; colIndex<row.length; colIndex++) {
+        for (colIndex=0; colIndex<row.length; colIndex++) {
           output = output + "<td>" + row[colIndex] + "</td>";
         }
 
@@ -93,12 +96,14 @@
 
     process: function() {
       //TODO: DRY this, and the similar functionality in drawHTML.
-      var row;
-      for (var rowIndex=0; rowIndex<rows.length; rowIndex++) {
+      var row,
+          rowIndex;
+
+      for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
         row = rows[rowIndex];
 
         if (typeof(options.fnProcessRow) === "function") {
-          options.fnProcessRow(row);
+          options.fnProcessRow(row, rowIndex + 1);
         }
       }
     }

@@ -75,6 +75,20 @@
     deepEqual(data, ['a', 'b', 'c']);
   });
 
+  test('fnProcessRow is passed row index', function() {
+    expect(3);
+    var rowsProcessed = 0;
+    var e = dropEventMock('a\nb\nc\n');
+    var opts = {
+      fnProcessRow: function(row, index) {
+        rowsProcessed += 1;
+        equal(index, rowsProcessed);
+      }
+    };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+  });
+
   test('delayProcessing delays processing', function() {
     expect(1);
     var rowsProcessed = 0;
