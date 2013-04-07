@@ -35,8 +35,7 @@
 
     drop: function(e) {
       var data = e.originalEvent.dataTransfer.getData(options.dataFormat);
-      //TODO: Put $.csv behind a facade.
-      rows = $.csv.toArrays(data, { separator: options.fieldDelimiter });
+      rows = methods.parseData(data);
       methods.drawHtml();
       if (typeof(options.fnDropComplete) === 'function') {
         options.fnDropComplete();
@@ -56,6 +55,10 @@
     dragLeave: function() {
       //TODO: removeClass
       return false;
+    },
+
+    parseData: function(data) {
+      return $.csv.toArrays(data, { separator: options.fieldDelimiter });
     },
 
     drawHtml: function() {
