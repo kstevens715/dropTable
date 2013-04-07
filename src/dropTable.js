@@ -6,11 +6,6 @@
  * Licensed under the MIT license.
  */
 
-//TODO: Anything with keys, hashes, column headers, etc?
-//TODO: Fallback to simple csv parsing if csv plugin isn't available.
-//      (console.log a warning).
-//TODO: Styling.
-//TODO: What about escaping the data from the drag and drop operation?
 (function($) {
 
   var DISALLOW_DROP = false;
@@ -60,12 +55,10 @@
     },
 
     dragEnter: function() {
-      //TODO: addClass
       return false;
     },
 
     dragLeave: function() {
-      //TODO: removeClass
       return false;
     },
 
