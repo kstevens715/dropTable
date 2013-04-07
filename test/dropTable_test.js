@@ -75,17 +75,32 @@
     deepEqual(data, ['a', 'b', 'c']);
   });
 
-  test('can delay callbacks', function() {
+  test('delayProcessing delays processing', function() {
     expect(1);
-    var count = 0;
-    var opts = {
-      processOnDrop: false,
-      fnProcessRow: function() { count += 1; }
-    };
+    var rowsProcessed = 0;
     var e = dropEventMock('a\nb\nc\n');
+    var opts = {
+      delayProcessing: true,
+      fnProcessRow: function() { rowsProcessed += 1; }
+    };
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
-    strictEqual(count, 0);
+    strictEqual(rowsProcessed, 0, "should not process rows automatically");
+  });
+
+  test('process method triggers delayed row processing', function() {
+    expect(2);
+    var e = dropEventMock('a\nb\nc\n');
+    var rowsProcessed = 0;
+    var opts = {
+      delayProcessing: true,
+      fnProcessRow: function() { rowsProcessed += 1; }
+    };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    equal(rowsProcessed, 0, "no rows should be processed");
+    this.dTable.dropTable('process');
+    equal(rowsProcessed, 3, "should process rows after `process`");
   });
 
   test('fieldDelimiter can be changed', function() {
@@ -114,11 +129,11 @@
   test('dataFormat can be set', function() {
     expect(1);
     var format;
+    var e = dropEventMock('a\nb\nc\n');
     var opts = {
       dataFormat: 'text/html',
       fnProcessRow: function(row) { format = row; }
     };
-    var e = dropEventMock('a\nb\nc\n');
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
     equal(format, "text/html");
