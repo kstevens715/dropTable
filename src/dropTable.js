@@ -23,7 +23,8 @@
         fnDropComplete: null,   // Called after drop and all processing.
         delayProcessing: false, // 
         fieldDelimiter: "\t",   // The field delimiter to parse dropped data.
-        dataFormat: "Text"      // Text seems to be most compatible.
+        dataFormat: "Text",     // Text seems to be most compatible.
+        columnDefinitions: null
       }, opts);
 
       this.on('dragover',  methods.dragOver);
@@ -31,6 +32,18 @@
       this.on('dragenter', methods.dragEnter);
       this.on('dragleave', methods.dragLeave);
 
+      methods.showColumnDefinitions();
+
+    },
+
+
+    showColumnDefinitions: function() {
+      var output = '<div><ul class="unstyled">';
+      for (var column in options.columnDefinitions) {
+        output += '<li><span class="badge">' + column + '</span></li>';
+      }
+      output += "</ul></div>";
+      that.append(output);
     },
 
     drop: function(e) {
@@ -68,7 +81,7 @@
 
     drawHtml: function() {
 
-      var output = "<table>";
+      var output = '<table class="table table-striped table-bordered">';
       var row, 
           rowIndex,
           colIndex;
@@ -85,7 +98,7 @@
         output += "</tr>";
       }
       output += "</table>";
-      that.html(output);
+      that.append(output);
     }
   };
 

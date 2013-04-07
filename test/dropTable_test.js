@@ -30,6 +30,22 @@
     }
   });
 
+  test('fieldDefinitions display as badge list', function() {
+    expect(1);
+    var e = dropEventMock('a\nb\nc\n');
+    var opts = {
+      columnDefinitions: {
+        title: true,
+        body: false,
+        assignee: false
+      }
+    };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    this.dTable;
+    console.log('done');
+  });
+
   test('fnDropComplete called after drop', function() {
     expect(1);
     var e = dropEventMock('a\nb\nc\n');
@@ -42,6 +58,7 @@
         equal(rowsProcessed, 3);
       }
     };
+    this.dTable.find('ul')
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
 
