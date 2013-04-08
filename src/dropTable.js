@@ -104,17 +104,22 @@
       that.find('.droptable-sidebar').html(output);
     },
 
+    applyStyling: function() {
+      //TODO: 
+    },
+
     renderTable: function() {
 
-      var output = '<table class="table table-striped table-bordered">';
       var row, 
           rowIndex,
-          colIndex;
-
-      output += '<thead>';
-      output += '<tr><th><span class="badge">test</span></th><th></th><th></th></tr>';
-      output += '</thead>';
-      output += '<tbody>';
+          colIndex,
+          output;
+      
+      output = '<table class="table table-striped table-bordered">' +
+               '<thead>' +
+               '<tr><th><span class="badge">test</span></th><th></th><th></th></tr>' +
+               '</thead>' +
+               '<tbody>';
 
       for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
         row = rows[rowIndex];
@@ -130,6 +135,10 @@
       output += "</tbody>";
       output += "</table>";
       that.find('.droptable-droparea').html(output);
+      var header = that.find('th span.badge');
+      header.on('dragover',  function() {
+        alert('works!');
+      });
     }
   };
 
