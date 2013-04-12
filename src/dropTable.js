@@ -11,14 +11,22 @@
   var BADGE = "Badge";
 
   var that,
-      options,
-      rows = [],
-      columns = [],
-      testnum = 0;
+      options;
 
   var methods = {
 
     init: function(opts) {
+
+      this.each(function() {
+        var data = that.data('dropTable');
+
+        if (!data) {
+          that.data('dropTable', {
+            rows: [],
+            columns: []
+          });
+        }
+      });
 
       options = $.extend({
         fnProcessRow: null,     // A callback to process each row.
@@ -29,6 +37,8 @@
         columnDefinitions: null,
         firstRowIsHeader: false
       }, opts);
+
+
 
       this.on('dragover',  methods.dragOver);
       this.on('drop',      methods.drop);
@@ -114,21 +124,18 @@
     renderTable: function() {
 
       var output;
-      testnum += 1;
-      console.log(testnum); //TODO: This number shouldn't increment with each test!
-      console.log(columns);
       
+      console.log(that.data('dropTable').columns);
       output = '<table class="table table-striped table-bordered">' +
                '<thead>';
 
       rows[0].forEach(function(field, index) {
         //TODO: This is where the badges should be rendered if columns are pre-defined.
         output += "<th>UNMAPPED</th>";
-        columns[index] = 'UNMAPPED' + index;
+        that.data('dropTable').columns[index] = 'UNMAPPED' + index;
       });
 
       output += "</thead><tbody>";
-
 
       rows.forEach(function(row) {
         output += "<tr>";
@@ -154,7 +161,7 @@
 
     mapColumn: function(e) {
       var data = e.originalEvent.dataTransfer.getData(BADGE);
-      columns[this.cellIndex] = data.toLowerCase();
+      that.data('dropTable').columns[this.cellIndex] = data.toLowerCase();
       $(this).html("<span class='badge'>" + data  + "</span>");
       $("li span.badge:contains('" + data + "')").parent().remove();
     }
@@ -169,12 +176,12 @@
         rows.forEach(function(rowArray, rowIndex) {
           if (rowIndex === 0 && options.firstRowIsHeader) {
             rowArray.forEach(function(cellValue, colIndex) {
-              columns[colIndex] = cellValue.toLowerCase();
+              that.data('dropTable').columns[colIndex] = cellValue.toLowerCase();
             });
           } else {
             row.rawData = rowArray;
             rowArray.forEach(function(cellValue, colIndex) {
-              row[columns[colIndex]] = cellValue;
+              row[that.data('dropTable').columns[colIndex]] = cellValue;
             });
             options.fnProcessRow(row, rowIndex + 1);
           }
