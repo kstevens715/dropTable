@@ -149,7 +149,7 @@
 
     mapColumn: function(e) {
       var data = e.originalEvent.dataTransfer.getData(BADGE);
-      columns[this.cellIndex] = data;
+      columns[this.cellIndex] = data.toLowerCase();
       $(this).html("<span class='badge'>" + data  + "</span>");
       $("li span.badge:contains('" + data + "')").parent().remove();
     }
@@ -161,13 +161,18 @@
       var row = {};
 
       if (typeof options.fnProcessRow === "function") {
-
         rows.forEach(function(rowArray, rowIndex) {
-          row.rawData = rowArray;
-          rowArray.forEach(function(cellValue, colIndex) {
-            row[columns[colIndex]] = cellValue;
-          });
-          options.fnProcessRow(row, rowIndex + 1);
+          if (rowIndex === 0 && options.firstRowIsHeader) {
+            rowArray.forEach(function(cellValue, colIndex) {
+              columns[colIndex] = cellValue.toLowerCase();
+            });
+          } else {
+            row.rawData = rowArray;
+            rowArray.forEach(function(cellValue, colIndex) {
+              row[columns[colIndex]] = cellValue;
+            });
+            options.fnProcessRow(row, rowIndex + 1);
+          }
         });
       }
     }

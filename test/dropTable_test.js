@@ -109,16 +109,15 @@
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
     $('#dTable th:eq(0)').trigger(dropEventMock('style', 'Badge'));
-    $('#dTable th:eq(1)').trigger(dropEventMock('color', 'Badge'));
-    $('#dTable th:eq(2)').trigger(dropEventMock('size', 'Badge'));
+    $('#dTable th:eq(1)').trigger(dropEventMock('Color', 'Badge'));
+    $('#dTable th:eq(2)').trigger(dropEventMock('SIZE', 'Badge'));
     this.dTable.dropTable('process');
   });
 
   test('column headers can be automatically mapped', function() {
-    expect(3);
-    var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n'),
+    expect(3);var e = dropEventMock('style\tColor\tSIZE\n10001\tBLK\tS\n'),
         opts = {
-          columnDefinitions: ['style', 'color', 'size'],
+          firstRowIsHeader: true,
           fnProcessRow: function(row) {
             equal(row.style, '10001'); 
             equal(row.color, 'BLK');
