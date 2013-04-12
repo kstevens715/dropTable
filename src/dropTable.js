@@ -13,7 +13,8 @@
   var that,
       options,
       rows = [],
-      columns = [];
+      columns = [],
+      testnum = 0;
 
   var methods = {
 
@@ -113,11 +114,15 @@
     renderTable: function() {
 
       var output;
+      testnum += 1;
+      console.log(testnum); //TODO: This number shouldn't increment with each test!
+      console.log(columns);
       
       output = '<table class="table table-striped table-bordered">' +
                '<thead>';
 
       rows[0].forEach(function(field, index) {
+        //TODO: This is where the badges should be rendered if columns are pre-defined.
         output += "<th>UNMAPPED</th>";
         columns[index] = 'UNMAPPED' + index;
       });

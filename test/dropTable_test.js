@@ -115,18 +115,32 @@
   });
 
   test('column headers can be automatically mapped', function() {
-    expect(3);var e = dropEventMock('style\tColor\tSIZE\n10001\tBLK\tS\n'),
-        opts = {
-          firstRowIsHeader: true,
-          fnProcessRow: function(row) {
-            equal(row.style, '10001'); 
-            equal(row.color, 'BLK');
-            equal(row.size, 'S');
-          } 
-        };
-     this.dTable.dropTable(opts);
-     this.dTable.trigger(e);
+    expect(3);
+    var e = dropEventMock('style\tColor\tSIZE\n10001\tBLK\tS\n'),
+    opts = {
+      //TODO: column definitions are ignored here. Is this a feature or a bug?
+      columnDefinitions: ['style', 'color', 'size'],
+      firstRowIsHeader: true,
+      fnProcessRow: function(row) {
+        equal(row.style, '10001'); 
+        equal(row.color, 'BLK');
+        equal(row.size, 'S');
+      } 
+    };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
    });
+
+  test('automaticaly mapped columns display badge', function() {
+    expect(3);
+    var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n'),
+        opts = { firstRowIsHeader: true };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    equal($("#dTable th:eq(0)").html(), '<span class="badge">style</span>');
+    equal($("#dTable th:eq(1)").html(), '<span class="badge">color</span>');
+    equal($("#dTable th:eq(2)").html(), '<span class="badge">size</span>');
+  });
 
   test('fnProcessRow is passed row data', function() {
     expect(1);

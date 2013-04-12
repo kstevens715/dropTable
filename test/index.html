@@ -13,11 +13,12 @@
 
     function drag(e)
     {
-      e.dataTransfer.setData("Text", "column1\tcolumn2\tcolumn3\nrow2a\trow2b\trow2c\nrow3a\trow3b\trow3c");
+      e.dataTransfer.setData("Text", "style\tcolumn2\tupc\nrow2a\trow2b\trow2c\nrow3a\trow3b\trow3c");
     }
     
     $(function() {
         var opts = {
+          firstRowIsHeader: true,
           fnProcessRow: function(data) {
             console.log("PROCESSING ROW");
             console.log(data);
