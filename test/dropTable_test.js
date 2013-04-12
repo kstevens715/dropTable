@@ -9,7 +9,7 @@
       originalEvent: {
         dataTransfer: {
           getData: function(dataFormat) {
-            return dataFormat === srcFormat ? data : ""
+            return dataFormat === srcFormat ? data : "";
           }
         }
       }
@@ -56,7 +56,7 @@
           fnDropComplete: function() {
             dataDropped = true;
           }
-        }
+        };
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
     ok(!dataDropped);
@@ -95,16 +95,15 @@
 
   test('can map columns', function() {
     expect(3);
-    var e = dropEventMock('10001\tBLK\tS\n');
-    var data = null;
-    var opts = {
-      columnDefinitions: ['style', 'color', 'size'],
-      delayProcessing: true,
-      fnProcessRow: function(row) {
-        equal(row.style, '10001');
-        equal(row.color, 'BLK');
-        equal(row.size, 'S');
-      }
+    var e = dropEventMock('10001\tBLK\tS\n'),
+        opts = {
+          columnDefinitions: ['style', 'color', 'size'],
+          delayProcessing: true,
+          fnProcessRow: function(row) {
+            equal(row.style, '10001');
+            equal(row.color, 'BLK');
+            equal(row.size, 'S');
+        }
     };
 
     this.dTable.dropTable(opts);
@@ -116,6 +115,7 @@
   });
 
   test('column headers can be automatically mapped', function() {
+    expect(3);
     var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n'),
         opts = {
           columnDefinitions: ['style', 'color', 'size'],
@@ -124,7 +124,7 @@
             equal(row.color, 'BLK');
             equal(row.size, 'S');
           } 
-        }
+        };
      this.dTable.dropTable(opts);
      this.dTable.trigger(e);
    });
@@ -135,7 +135,7 @@
     var data = null;
     var opts = {
       fnProcessRow: function(row) {
-        data = row.rawData
+        data = row.rawData;
       }
     };
     this.dTable.dropTable(opts);
@@ -211,7 +211,7 @@
   test('dataFormat can be set', function() {
     expect(1);
     var data,
-        e = dropEventMock('a\tb\tc\n', 'text/html');
+        e = dropEventMock('a\tb\tc\n', 'text/html'),
         opts = {
           dataFormat: 'text/html',
           fnProcessRow: function(row) { data = row.rawData; }

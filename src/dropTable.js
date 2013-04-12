@@ -112,32 +112,27 @@
 
     renderTable: function() {
 
-      var row, 
-          rowIndex,
-          colIndex,
-          output;
+      var output;
       
       output = '<table class="table table-striped table-bordered">' +
-               '<thead>'
+               '<thead>';
 
-      for (colIndex=0; colIndex<rows[0].length; colIndex++) {
+      rows[0].forEach(function(field, index) {
         output += "<th>UNMAPPED</th>";
-        columns[colIndex] = 'UNMAPPED' + colIndex
-      }
+        columns[index] = 'UNMAPPED' + index;
+      });
+
       output += "</thead><tbody>";
 
 
-      for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
-        row = rows[rowIndex];
-
+      rows.forEach(function(row) {
         output += "<tr>";
-
-        for (colIndex=0; colIndex<row.length; colIndex++) {
-          output = output + "<td>" + row[colIndex] + "</td>";
-        }
-
+        row.forEach(function(cellValue) {
+          output = output + "<td>" + cellValue + "</td>";
+        });
         output += "</tr>";
-      }
+      });
+
       output += "</tbody>";
       output += "</table>";
       that.find('.droptable-droparea').html(output);
@@ -149,7 +144,7 @@
 
     dragOverColumn: function(e) {
       var data = e.originalEvent.dataTransfer.getData(BADGE);
-      return data === BADGE ? true : false
+      return data === BADGE ? true : false;
     },
 
     mapColumn: function(e) {
@@ -163,22 +158,17 @@
   var publicMethods = {
 
     process: function() {
-      var rowData,
-          rowIndex,
-          colIndex,
-          row = {};
+      var row = {};
 
-      if (typeof(options.fnProcessRow) === "function") {
+      if (typeof options.fnProcessRow === "function") {
 
-        for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
-          rowData = rows[rowIndex];
-
-          for (colIndex=0; colIndex<rowData.length; colIndex++) {
-            row[columns[colIndex]] = rowData[colIndex];
-          }
-          row.rawData = rowData;
+        rows.forEach(function(rowArray, rowIndex) {
+          row.rawData = rowArray;
+          rowArray.forEach(function(cellValue, colIndex) {
+            row[columns[colIndex]] = cellValue;
+          });
           options.fnProcessRow(row, rowIndex + 1);
-        }
+        });
       }
     }
   };
