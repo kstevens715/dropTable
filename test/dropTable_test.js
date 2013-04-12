@@ -131,7 +131,7 @@
     this.dTable.trigger(e);
    });
 
-  test('automaticaly mapped columns display badge', function() {
+  test('automatically mapped columns display badge', function() {
     expect(3);
     var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n'),
         opts = { firstRowIsHeader: true };

@@ -53,6 +53,7 @@
       if (!methods.isBadge(e)) {
         var data = e.originalEvent.dataTransfer.getData(options.dataFormat);
         rows = methods.parseData(data);
+        methods.extractHeaders();
 
         if (!options.delayProcessing) {
           publicMethods.process();
@@ -91,6 +92,14 @@
       return $.csv.toArrays(data, { separator: options.fieldDelimiter });
     },
 
+    extractHeaders: function() {
+      if (options.firstRowIsHeader) {
+        rows[0].forEach(function(headerText, columnIndex) {
+          that.data('dropTable').columns[columnIndex] = headerText.toLowerCase();
+        });
+      };
+    },
+
     renderDropTable: function() {
       var output =
         "<div class='droptable-sidebar'>" +
@@ -123,16 +132,21 @@
 
     renderTable: function() {
 
-      var output;
+      var output,
+          colHeader;
       
-      console.log(that.data('dropTable').columns);
       output = '<table class="table table-striped table-bordered">' +
                '<thead>';
 
+      // Output Header Row
       rows[0].forEach(function(field, index) {
-        //TODO: This is where the badges should be rendered if columns are pre-defined.
-        output += "<th>UNMAPPED</th>";
-        that.data('dropTable').columns[index] = 'UNMAPPED' + index;
+        colHeader = that.data('dropTable').columns[index]
+        if (colHeader === undefined) {
+          output += "<th>UNMAPPED</th>";
+          that.data('dropTable').columns[index] = 'UNMAPPED' + index;
+        } else {
+          output += "<th><span class='badge'>" + colHeader  + "</span></th>";
+        }
       });
 
       output += "</thead><tbody>";
@@ -174,11 +188,7 @@
 
       if (typeof options.fnProcessRow === "function") {
         rows.forEach(function(rowArray, rowIndex) {
-          if (rowIndex === 0 && options.firstRowIsHeader) {
-            rowArray.forEach(function(cellValue, colIndex) {
-              that.data('dropTable').columns[colIndex] = cellValue.toLowerCase();
-            });
-          } else {
+          if (!options.firstRowIsHeader || rowIndex > 0) {
             row.rawData = rowArray;
             rowArray.forEach(function(cellValue, colIndex) {
               row[that.data('dropTable').columns[colIndex]] = cellValue;
