@@ -12,7 +12,8 @@
 
   var that,
       options,
-      rows = [];
+      rows = [],
+      columns = [];
 
   var methods = {
 
@@ -92,7 +93,7 @@
     renderSidebar: function() {
       var output = '<div><ul class="droptable-columndefinitions unstyled">';
       for (var column in options.columnDefinitions) {
-        output += '<li>';
+        output += '<li id="droptable-badge-' + column + '">';
         output += '<span class="badge" draggable="true" ';
         output += 'ondragstart="';
         output += 'event.dataTransfer.setData(\'Badge\', \'' + column + '\')"';
@@ -116,10 +117,14 @@
           output;
       
       output = '<table class="table table-striped table-bordered">' +
-               '<thead>' +
-               '<tr><th><span class="badge">test</span></th><th></th><th></th></tr>' +
-               '</thead>' +
-               '<tbody>';
+               '<thead>'
+
+      for (colIndex=0; colIndex<rows[0].length; colIndex++) {
+        output += "<th>UNMAPPED</th>";
+        columns[colIndex] = 'UNMAPPED' + colIndex
+      }
+      output += "</thead><tbody>";
+
 
       for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
         row = rows[rowIndex];
@@ -135,22 +140,41 @@
       output += "</tbody>";
       output += "</table>";
       that.find('.droptable-droparea').html(output);
-      var header = that.find('th span.badge');
-      header.on('dragover',  function() {
-        alert('works!');
-      });
+
+      var header = that.find('th');
+      header.on('dragover', methods.dragOverColumn);
+      header.on('drop', methods.mapColumn);
+    },
+
+    dragOverColumn: function(e) {
+      var data = e.originalEvent.dataTransfer.getData(BADGE);
+      return data === BADGE ? true : false
+    },
+
+    mapColumn: function(e) {
+      var data = e.originalEvent.dataTransfer.getData(BADGE);
+      columns[this.cellIndex] = data;
+      $(this).html("<span class='badge'>" + data  + "</span>");
+      $("li span.badge:contains('" + data + "')").parent().remove();
     }
   };
 
   var publicMethods = {
 
     process: function() {
-      var row,
-          rowIndex;
+      var rowData,
+          rowIndex,
+          colIndex,
+          row = {};
 
       if (typeof(options.fnProcessRow) === "function") {
         for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
-          row = rows[rowIndex];
+          rowData = rows[rowIndex];
+
+          for (colIndex=0; colIndex<rowData.length; colIndex++) {
+            row[columns[colIndex]] = rowData[colIndex];
+          }
+          row.rawData = rowData;
           options.fnProcessRow(row, rowIndex + 1);
         }
       }

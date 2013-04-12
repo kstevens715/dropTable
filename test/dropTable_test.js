@@ -93,13 +93,35 @@
     strictEqual(count, 3);
   });
 
+  test('can map columns', function() {
+    expect(3);
+    var e = dropEventMock('10001\tBLK\tS\n');
+    var data = null;
+    var opts = {
+      columnDefinitions: ['style', 'color', 'size'],
+      delayProcessing: true,
+      fnProcessRow: function(row) {
+        equal(row.style, '10001');
+        equal(row.color, 'BLK');
+        equal(row.size, 'S');
+      }
+    };
+
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    $('#dTable th:eq(0)').trigger(dropEventMock('style', 'Badge'));
+    $('#dTable th:eq(1)').trigger(dropEventMock('color', 'Badge'));
+    $('#dTable th:eq(2)').trigger(dropEventMock('size', 'Badge'));
+    this.dTable.dropTable('process');
+  });
+
   test('fnProcessRow is passed row data', function() {
     expect(1);
     var e = dropEventMock('a\tb\tc\n');
     var data = null;
     var opts = {
       fnProcessRow: function(row) {
-        data = row;
+        data = row.rawData
       }
     };
     this.dTable.dropTable(opts);
@@ -156,7 +178,7 @@
     var opts = {
       fieldDelimiter: ',',
       fnProcessRow: function(row) {
-        data = row;
+        data = row.rawData;
       }
     };
     this.dTable.dropTable(opts);
@@ -178,7 +200,7 @@
         e = dropEventMock('a\tb\tc\n', 'text/html');
         opts = {
           dataFormat: 'text/html',
-          fnProcessRow: function(row) { data = row; }
+          fnProcessRow: function(row) { data = row.rawData; }
         };
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
