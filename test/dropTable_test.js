@@ -115,6 +115,20 @@
     this.dTable.dropTable('process');
   });
 
+  test('column headers can be automatically mapped', function() {
+    var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n'),
+        opts = {
+          columnDefinitions: ['style', 'color', 'size'],
+          fnProcessRow: function(row) {
+            equal(row.style, '10001'); 
+            equal(row.color, 'BLK');
+            equal(row.size, 'S');
+          } 
+        }
+     this.dTable.dropTable(opts);
+     this.dTable.trigger(e);
+   });
+
   test('fnProcessRow is passed row data', function() {
     expect(1);
     var e = dropEventMock('a\tb\tc\n');

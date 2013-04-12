@@ -25,7 +25,8 @@
         delayProcessing: false, // 
         fieldDelimiter: "\t",   // The field delimiter to parse dropped data.
         dataFormat: "Text",     // Text seems to be most compatible.
-        columnDefinitions: null
+        columnDefinitions: null,
+        firstRowIsHeader: false
       }, opts);
 
       this.on('dragover',  methods.dragOver);
@@ -168,6 +169,7 @@
           row = {};
 
       if (typeof(options.fnProcessRow) === "function") {
+
         for (rowIndex=0; rowIndex<rows.length; rowIndex++) {
           rowData = rows[rowIndex];
 
