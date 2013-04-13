@@ -1,7 +1,4 @@
 (function($) {
-    //http://api.qunitjs.com/
-  // This is all that I need from the event
-  // e.originalEvent.dataTransfer.getData("text/plain");
 
   var dropEventMock = function(data, srcFormat) {
     srcFormat = typeof srcFormat !== 'undefined' ? srcFormat : 'Text';
@@ -20,9 +17,6 @@
     setup: function() {
       $('#qunit-fixture').html('<div id="dTable"></div>');
       this.dTable = $('#dTable');
-    },
-    teardown: function() {
-      $('#qunit-fixture').html('');
     }
   });
 
