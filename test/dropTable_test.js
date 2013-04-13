@@ -106,6 +106,15 @@
     equal($("#dTable th:eq(2)").html(), '<span class="badge">size</span>');
   });
 
+  test('headers are only displayed in thead', function() {
+    expect(1);
+    var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n'),
+        opts = { firstRowIsHeader: true };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    equal(this.dTable.find('td:contains("style")').length, 0, 'header displayed in tbody');
+  });
+
   module('callbacks', init);
 
   test('fnDropComplete called after drop', function() {
