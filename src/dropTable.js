@@ -52,7 +52,7 @@
     drop: function(e) {
       if (!methods.isBadge(e)) {
         var data = e.originalEvent.dataTransfer.getData(options.dataFormat);
-        rows = methods.parseData(data);
+        that.data('dropTable').rows = methods.parseData(data);
         methods.extractHeaders();
 
         if (!options.delayProcessing) {
@@ -94,10 +94,10 @@
 
     extractHeaders: function() {
       if (options.firstRowIsHeader) {
-        rows[0].forEach(function(headerText, columnIndex) {
+        that.data('dropTable').rows[0].forEach(function(headerText, columnIndex) {
           that.data('dropTable').columns[columnIndex] = headerText.toLowerCase();
         });
-      };
+      }
     },
 
     renderDropTable: function() {
@@ -139,8 +139,8 @@
                '<thead>';
 
       // Output Header Row
-      rows[0].forEach(function(field, index) {
-        colHeader = that.data('dropTable').columns[index]
+      that.data('dropTable').rows[0].forEach(function(field, index) {
+        colHeader = that.data('dropTable').columns[index];
         if (colHeader === undefined) {
           output += "<th>UNMAPPED</th>";
           that.data('dropTable').columns[index] = 'UNMAPPED' + index;
@@ -151,7 +151,7 @@
 
       output += "</thead><tbody>";
 
-      rows.forEach(function(row) {
+      that.data('dropTable').rows.forEach(function(row) {
         output += "<tr>";
         row.forEach(function(cellValue) {
           output = output + "<td>" + cellValue + "</td>";
@@ -187,7 +187,7 @@
       var row = {};
 
       if (typeof options.fnProcessRow === "function") {
-        rows.forEach(function(rowArray, rowIndex) {
+        that.data('dropTable').rows.forEach(function(rowArray, rowIndex) {
           if (!options.firstRowIsHeader || rowIndex > 0) {
             row.rawData = rowArray;
             rowArray.forEach(function(cellValue, colIndex) {
