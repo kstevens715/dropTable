@@ -11,16 +11,17 @@
         }
       }
     });
-  };
+  },
+    init = {
+      setup: function() { 
+        $('#qunit-fixture').html('<div id="dTable"></div>');
+        this.dTable = $('#dTable');
+      }
+    };
 
-  module('jQuery#dropTable', {
-    setup: function() {
-      $('#qunit-fixture').html('<div id="dTable"></div>');
-      this.dTable = $('#dTable');
-    }
-  });
+  module('mapping columns', init);
 
-  test('fieldDefinitions display as badge list', function() {
+  test('column definitions display as badge list', function() {
     expect(3);
     var columns,
         e = dropEventMock('a\nb\nc\n'),
@@ -54,37 +55,6 @@
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
     ok(!dataDropped);
-  });
-
-  test('fnDropComplete called after drop', function() {
-    expect(1);
-    var e = dropEventMock('a\nb\nc\n');
-    var rowsProcessed = 0;
-    var opts = {
-      fnProcessRow: function() {
-        rowsProcessed += 1;
-      },
-      fnDropComplete: function() {
-        equal(rowsProcessed, 3);
-      }
-    };
-    this.dTable.dropTable(opts);
-    this.dTable.trigger(e);
-
-  });
-
-  test('fnProcessRow called once per row', function() {
-    expect(1);
-    var count = 0;
-    var e = dropEventMock('a\nb\nc\n');
-    var opts = {
-      fnProcessRow: function() {
-        count += 1;
-      }
-    };
-    this.dTable.dropTable(opts);
-    this.dTable.trigger(e);
-    strictEqual(count, 3);
   });
 
   test('can map columns', function() {
@@ -135,6 +105,40 @@
     equal($("#dTable th:eq(1)").html(), '<span class="badge">color</span>');
     equal($("#dTable th:eq(2)").html(), '<span class="badge">size</span>');
   });
+
+  module('callbacks', init);
+
+  test('fnDropComplete called after drop', function() {
+    expect(1);
+    var e = dropEventMock('a\nb\nc\n');
+    var rowsProcessed = 0;
+    var opts = {
+      fnProcessRow: function() {
+        rowsProcessed += 1;
+      },
+      fnDropComplete: function() {
+        equal(rowsProcessed, 3);
+      }
+    };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+
+  });
+
+  test('fnProcessRow called once per row', function() {
+    expect(1);
+    var count = 0;
+    var e = dropEventMock('a\nb\nc\n');
+    var opts = {
+      fnProcessRow: function() {
+        count += 1;
+      }
+    };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    strictEqual(count, 3);
+  });
+
 
   test('fnProcessRow is passed row data', function() {
     expect(1);
@@ -191,6 +195,8 @@
     this.dTable.dropTable('process');
     equal(rowsProcessed, 3, "should process rows after `process`");
   });
+
+  module('options', init);
 
   test('fieldDelimiter can be changed', function() {
     expect(1);
