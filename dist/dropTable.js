@@ -6,7 +6,9 @@ var tableModel = {
   columns: []
 };
 
+/*global tableModel: false */
 (function($) {
+  "use strict";
 
   var BADGE = "Badge";
 

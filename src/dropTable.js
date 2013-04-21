@@ -6,7 +6,9 @@
  * Licensed under the MIT license.
  */
 
+/*global tableModel: false */
 (function($) {
+  "use strict";
 
   var BADGE = "Badge";
 
