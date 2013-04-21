@@ -96,6 +96,8 @@
       if (options.firstRowIsHeader) {
         that.data('dropTable').rows[0].forEach(function(headerText, columnIndex) {
           that.data('dropTable').columns[columnIndex] = headerText.toLowerCase();
+          //TODO: This is highly redundent.
+          $("li span.badge:contains('" + headerText + "')").parent().remove();
         });
       }
     },

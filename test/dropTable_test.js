@@ -106,6 +106,22 @@
     equal($("#dTable th:eq(2)").html(), '<span class="badge">size</span>');
   });
 
+  test('automatically mapped columns remove badge from unmapped list', function() {
+    expect(5);
+    var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n'),
+        opts = { 
+          firstRowIsHeader: true,
+          columnDefinitions: {'style': true, 'color': true, 'size': true, 'upc': true, 'sku': true}
+        };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    equal($(".droptable-sidebar li:contains('style')").length, 0);
+    equal($(".droptable-sidebar li:contains('color')").length, 0);
+    equal($(".droptable-sidebar li:contains('size')").length, 0);
+    equal($(".droptable-sidebar li:contains('sku')").length, 1);
+    equal($(".droptable-sidebar li:contains('upc')").length, 1);
+  });
+
   test('headers are only displayed in thead', function() {
     expect(1);
     var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n'),
