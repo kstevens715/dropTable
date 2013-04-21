@@ -21,10 +21,7 @@
         var data = that.data('dropTable');
 
         if (!data) {
-          that.data('dropTable', {
-            rows: [],
-            columns: []
-          });
+          that.data('dropTable', tableModel);
         }
       });
 

@@ -1,6 +1,11 @@
-/*! Drag, Drop & Process data from spreadsheet - v0.1.0 - 2013-04-13
+/*! Drag, Drop & Process data from spreadsheet - v0.1.0 - 2013-04-20
 * https://github.com/kstevens715/dropTable
 * Copyright (c) 2013 Kyle Stevens; Licensed MIT */
+var tableModel = {
+  rows: [],
+  columns: []
+};
+
 (function($) {
 
   var BADGE = "Badge";
@@ -16,10 +21,7 @@
         var data = that.data('dropTable');
 
         if (!data) {
-          that.data('dropTable', {
-            rows: [],
-            columns: []
-          });
+          that.data('dropTable', tableModel);
         }
       });
 
@@ -91,6 +93,8 @@
       if (options.firstRowIsHeader) {
         that.data('dropTable').rows[0].forEach(function(headerText, columnIndex) {
           that.data('dropTable').columns[columnIndex] = headerText.toLowerCase();
+          //TODO: This is highly redundent.
+          $("li span.badge:contains('" + headerText + "')").parent().remove();
         });
       }
     },
@@ -128,17 +132,22 @@
     renderTable: function() {
 
       var output,
-          colHeader;
+          colHeader,
+          rows,
+          columns;
+
+      rows = that.data('dropTable').rows;
+      columns = that.data('dropTable').columns;
       
       output = '<table class="table table-striped table-bordered">' +
                '<thead>';
 
       // Output Header Row
-      that.data('dropTable').rows[0].forEach(function(field, index) {
-        colHeader = that.data('dropTable').columns[index];
+      rows[0].forEach(function(field, index) {
+        colHeader = columns[index];
         if (colHeader === undefined) {
           output += "<th>UNMAPPED</th>";
-          that.data('dropTable').columns[index] = 'UNMAPPED' + index;
+          columns[index] = 'UNMAPPED' + index;
         } else {
           output += "<th><span class='badge'>" + colHeader  + "</span></th>";
         }
@@ -146,7 +155,7 @@
 
       output += "</thead><tbody>";
 
-      that.data('dropTable').rows.forEach(function(row) {
+      rows.slice(1).forEach(function(row) {
         output += "<tr>";
         row.forEach(function(cellValue) {
           output = output + "<td>" + cellValue + "</td>";
