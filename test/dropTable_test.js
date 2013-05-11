@@ -264,4 +264,25 @@
     strictEqual(this.dTable.dropTable(), this.dTable, 'should be chainable');
   });
 
+  module('styling', init);
+
+  test('table class defaults to `table`', function() {
+    var e = dropEventMock('a\tb\tc\n');
+    this.dTable.dropTable();
+    this.dTable.trigger(e);
+    strictEqual($('#dTable table').attr('class'), 'table');
+  });
+
+  test('table class can be overridden', function() {
+    var e = dropEventMock('a\tb\tc\n'),
+        opts = {
+          tableClassNames: ['table-striped', 'table-bordered']
+        };
+
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    strictEqual($('#dTable table').attr('class'), 'table-striped table-bordered');
+
+  });
+
 }(jQuery));

@@ -7,7 +7,7 @@
  */
 
 /*global tableModel: false */
-(function($) {
+;(function($) {
   "use strict";
 
   var BADGE = "Badge";
@@ -28,6 +28,7 @@
       });
 
       options = $.extend({
+        tableClassNames: ['table'],
         fnProcessRow: null,     // A callback to process each row.
         fnDropComplete: null,   // Called after drop and all processing.
         delayProcessing: false, // 
@@ -128,7 +129,10 @@
     },
 
     applyStyling: function() {
-      //TODO: 
+      var table = that.find('table');
+      options.tableClassNames.forEach(function(name) {
+        table.addClass(name);
+      });
     },
 
     renderTable: function() {
@@ -141,7 +145,7 @@
       rows = that.data('dropTable').rows;
       columns = that.data('dropTable').columns;
       
-      output = '<table class="table table-striped table-bordered">' +
+      output = '<table>' +
                '<thead>';
 
       // Output Header Row
@@ -172,6 +176,7 @@
       var header = that.find('th');
       header.on('dragover', methods.dragOverColumn);
       header.on('drop', methods.mapColumn);
+      methods.applyStyling();
     },
 
     dragOverColumn: function(e) {
