@@ -189,6 +189,15 @@
     this.dTable.trigger(e);
   });
 
+  test('fnProcessRow failure changes row styling', function() {
+    // default row class to 'error'. Make configurable.
+    ok(false);
+  });
+
+  test('fnProcessRow failure adds error message column', function() {
+    ok(false);
+  });
+
   test('delayProcessing delays processing', function() {
     var rowsProcessed = 0;
     var e = dropEventMock('a\nb\nc\n');
@@ -253,6 +262,13 @@
 
   test('is chainable', function() {
     strictEqual(this.dTable.dropTable(), this.dTable, 'should be chainable');
+  });
+
+  test('exceeding maxRecordCount is not allowed', function() {
+    //TODO: Probably display an alert box and reset state as if no data were dropped.
+    // http://stackoverflow.com/questions/6608278/avoid-capture-verify-a-javascript-alert-when-testing-a-method-that-displays
+    // sinonjs.org
+    ok(false);
   });
 
   module('styling', init);
