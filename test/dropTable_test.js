@@ -123,7 +123,6 @@
   });
 
   test('headers are only displayed in thead', function() {
-    expect(1);
     var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n'),
         opts = { firstRowIsHeader: true };
     this.dTable.dropTable(opts);
@@ -134,7 +133,6 @@
   module('callbacks', init);
 
   test('fnDropComplete called after drop', function() {
-    expect(1);
     var e = dropEventMock('a\nb\nc\n');
     var rowsProcessed = 0;
     var opts = {
@@ -151,7 +149,6 @@
   });
 
   test('fnProcessRow called once per row', function() {
-    expect(1);
     var count = 0;
     var e = dropEventMock('a\nb\nc\n');
     var opts = {
@@ -166,7 +163,6 @@
 
 
   test('fnProcessRow is passed row data', function() {
-    expect(1);
     var e = dropEventMock('a\tb\tc\n');
     var data = null;
     var opts = {
@@ -194,7 +190,6 @@
   });
 
   test('delayProcessing delays processing', function() {
-    expect(1);
     var rowsProcessed = 0;
     var e = dropEventMock('a\nb\nc\n');
     var opts = {
@@ -224,7 +219,6 @@
   module('options', init);
 
   test('fieldDelimiter can be changed', function() {
-    expect(1);
     var data = null;
     var e = dropEventMock('a,b,c\n');
     var opts = {
@@ -239,7 +233,6 @@
   });
 
   test('can be called without options', function() {
-    expect(1);
     var e = dropEventMock('a\tb\tc\n');
     this.dTable.dropTable();
     this.dTable.trigger(e);
@@ -247,7 +240,6 @@
   });
 
   test('dataFormat can be set', function() {
-    expect(1);
     var data,
         e = dropEventMock('a\tb\tc\n', 'text/html'),
         opts = {
@@ -260,7 +252,6 @@
   });
 
   test('is chainable', function() {
-    expect(1);
     strictEqual(this.dTable.dropTable(), this.dTable, 'should be chainable');
   });
 
