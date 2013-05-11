@@ -189,6 +189,12 @@
     this.dTable.trigger(e);
   });
 
+  test('fnProcessRow success indicator', function() {
+    // not sure what the indicator should be. But something.
+    // Should also have the same function as a progress bar.
+    ok(false);
+  });
+
   test('fnProcessRow failure changes row styling', function() {
     // default row class to 'error'. Make configurable.
     ok(false);
