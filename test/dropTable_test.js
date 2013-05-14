@@ -20,12 +20,13 @@
     };
 
 
-  module('...', init);
+  module('defaults', init);
 
   test('each row is class dropTableRow', function() {
     var e = dropEventMock('10001\tBLK\tS\n10001\tBLK\tM\n');
     this.dTable.dropTable();
     this.dTable.trigger(e);
+    equal(this.dTable.find('tbody tr.dropTableRow').length, 2)
   });
 
   module('mapping columns', init);
