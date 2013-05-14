@@ -161,8 +161,8 @@
 
       output += "</thead><tbody>";
 
-      rows.slice(1).forEach(function(row) {
-        output += "<tr>";
+      rows.slice(options.firstRowIsHeader ? 1 : 0).forEach(function(row) {
+        output += "<tr class='dropTableRow'>";
         row.forEach(function(cellValue) {
           output = output + "<td>" + cellValue + "</td>";
         });

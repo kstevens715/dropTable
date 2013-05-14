@@ -19,6 +19,15 @@
       }
     };
 
+
+  module('...', init);
+
+  test('each row is class dropTableRow', function() {
+    var e = dropEventMock('10001\tBLK\tS\n10001\tBLK\tM\n');
+    this.dTable.dropTable();
+    this.dTable.trigger(e);
+  });
+
   module('mapping columns', init);
 
   test('column definitions display as badge list', function() {
@@ -128,6 +137,13 @@
     this.dTable.dropTable(opts);
     this.dTable.trigger(e);
     equal(this.dTable.find('td:contains("style")').length, 0, 'header displayed in tbody');
+  });
+
+  test('by default, all data is mapped as data rows (no headers)', function() {
+    var e = dropEventMock('style\tcolor\tsize\n10001\tBLK\tS\n');
+    this.dTable.dropTable();
+    this.dTable.trigger(e);
+    equal(this.dTable.find('tbody tr').length, 2);
   });
 
   module('callbacks', init);
