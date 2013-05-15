@@ -213,8 +213,20 @@
   });
 
   test('fnProcessRow failure changes row styling', function() {
-    // default row class to 'error'. Make configurable.
-    ok(false);
+    expect(4);
+    //TODO: Should failure be defined as returning false, or an exception?
+    var e = dropEventMock('a\nb\nc\nd\n');
+    var opts = {
+      firstRowIsHeader: true,
+      rowErrorClassNames: ['error', 'oilers'],
+      fnProcessRow: function(row, index) { return !row.rawData[0].match(/[abc]/); }
+    };
+    this.dTable.dropTable(opts);
+    this.dTable.trigger(e);
+    equal($('.dropTableRow.error.oilers').length, 2, '2 rows are marked as errors')
+    equal($('.dropTableRow.error.oilers:contains("b")').length, 1, 'first data row is marked as error')
+    equal($('.dropTableRow.error.oilers:contains("c")').length, 1, 'second data row is marked as error')
+    equal($('.dropTableRow.error.oilers:contains("d")').length, 0, 'third data row is NOT marked as error')
   });
 
   test('fnProcessRow failure adds error message column', function() {

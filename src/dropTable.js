@@ -29,6 +29,7 @@
 
       options = $.extend({
         tableClassNames: ['table'],
+        rowErrorClassNames: ['error'],
         fnProcessRow: null,     // A callback to process each row.
         fnDropComplete: null,   // Called after drop and all processing.
         delayProcessing: false, // 
@@ -37,8 +38,6 @@
         columnDefinitions: null,
         firstRowIsHeader: false
       }, opts);
-
-
 
       this.on('dragover',  methods.dragOver);
       this.on('drop',      methods.drop);
@@ -55,11 +54,11 @@
         that.data('dropTable').rows = methods.parseData(data);
         methods.extractHeaders();
 
+        methods.renderTable();
+
         if (!options.delayProcessing) {
           publicMethods.process();
         }
-
-        methods.renderTable();
 
         if (typeof(options.fnDropComplete) === 'function') {
           options.fnDropComplete();
@@ -200,11 +199,18 @@
       if (typeof options.fnProcessRow === "function") {
         that.data('dropTable').rows.forEach(function(rowArray, rowIndex) {
           if (!options.firstRowIsHeader || rowIndex > 0) {
+            if (options.firstRowIsHeader) rowIndex--;
             row.rawData = rowArray;
             rowArray.forEach(function(cellValue, colIndex) {
               row[that.data('dropTable').columns[colIndex]] = cellValue;
             });
-            options.fnProcessRow(row, rowIndex + 1);
+            var result = options.fnProcessRow(row, rowIndex + 1);
+            if (!result) {
+              var selector = '.dropTableRow:eq(' + rowIndex + ')';
+              options.rowErrorClassNames.forEach(function(name) {
+                $(selector).addClass(name);
+              });
+            };
           }
         });
       }
